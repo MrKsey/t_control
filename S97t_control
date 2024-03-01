@@ -38,7 +38,7 @@ case "$1" in
        echo; [ ! -z "$(pgrep -f ./t_control.sh)" ] && echo "t_control.sh ЗАПУЩЕН" || echo "t_control.sh ОСТАНОВЛЕН"; echo
        ;;
     *)
-       echo;echo "Usage: $0 {start|stop|status|restart}";echo
+       start
 esac
 
 exit 0

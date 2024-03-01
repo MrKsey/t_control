@@ -27,11 +27,11 @@ echo -n "Введите [1-3]: "
 
 read choice
 
-if [ choice -eq 3 ]; then
+if [ "$choice" = "3" ]; then
     exit 0
 fi
 
-if [ choice -eq 2 ]; then
+if [ "$choice" = "2" ]; then
     rm $STARTUP/S97t_control_2
     rm -rf /opt/apps/test
     exit 0

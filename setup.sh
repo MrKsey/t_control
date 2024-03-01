@@ -11,7 +11,7 @@
 #   - Создать бота Telegram, получить bot token и chat ID - https://sitogon.ru/blog/252-kak-sozdat-telegram-bot-poluchit-ego-token-i-chat-id
 #   - Подключитсья по ssh к своему роутеру или серверу Linux
 #   - Установить пакет curl командой "opkg install curl" (роутер) или "apt install curl" (сервер с debian, ubuntu ...)
-#   - Выполните команду "curl -sOfL "$GIT_URL/setup.sh?$(date +%s)" && sh setup.sh"
+#   - Выполните команду "curl -sOfL "https://raw.githubusercontent.com/MrKsey/t_control/main/setup.sh" && sh setup.sh"
 
 
 GIT_URL="https://raw.githubusercontent.com/MrKsey/t_control/main"

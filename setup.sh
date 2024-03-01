@@ -11,10 +11,12 @@
 #   - Создать бота Telegram, получить bot token и chat ID - https://sitogon.ru/blog/252-kak-sozdat-telegram-bot-poluchit-ego-token-i-chat-id
 #   - Подключитсья по ssh к своему роутеру или серверу Linux
 #   - Установить пакет curl командой "opkg install curl" (роутер) или "apt install curl" (сервер с debian, ubuntu ...)
-#   - Выполните команду "curl -sOfL https://raw.githubusercontent.com/MrKsey/t_control/main/setup.sh && sh setup.sh"
+#   - Выполните команду "curl -sOfL https://raw.githubusercontent.com/MrKsey/t_control/main/setup.sh?$(date +%s) && sh setup.sh"
+
 
 STARTUP="/etc/init.d"
 [ ! -z "$(ls /opt/etc/init.d | grep "^S")" ] && export STARTUP="/opt/etc/init.d"
+
 
 # -------------  Взаимодействие с пользователем -----------------------------------------------------------
 
@@ -32,8 +34,13 @@ if [ "$choice" = "3" ]; then
 fi
 
 if [ "$choice" = "2" ]; then
+    echo
+    echo "Удаляем $STARTUP/S97t_control ..."
     rm $STARTUP/S97t_control_2
+    echo "Удаляем /opt/apps/t_control ..."
     rm -rf /opt/apps/test
+    echo "Удаление завершено."
+    echo
     exit 0
 fi
 
@@ -58,6 +65,7 @@ if [ -z "$BOT_TOKEN" ] || [ -z "$BOT_CHAT_ID" ]; then
 fi
 
 # ---------------------------------------------------------------------------------------------------------
+
 
 # Отключаем лишнее взаимодейстивие
 export DEBIAN_FRONTEND=noninteractive

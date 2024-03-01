@@ -124,7 +124,7 @@ do
                         # Если название домена не найдено, то прерываем выполнение и переходим к следующей команде
                         # Если найдено - создаем команду вида "kvas add <*домен>"
                         if [ -z "$DOMAIN_NAME" ]; then
-                            CMD_RESULT=$(echo "The command [$COMMAND] is not allowed in KVAS mode")
+                            CMD_RESULT=$(echo "Команда ['"$COMMAND"'] запрещена в режиме KVAS.")
                             curl -X POST -H 'Content-Type: application/json' -d '{"chat_id": "'"$BOT_CHAT_ID"'", "text": "'"$CMD_RESULT"'", "disable_notification": true}' "$SEND_MSG_URL"
                             continue
                         else

@@ -1,17 +1,17 @@
 #!/bin/sh
 
-# Установщик скрипта для запуска команд на локальном хосте через бота Telegram
+# Установщик скрипта для запуска команд на удаленном хосте через бота Telegram
 # Что делает:
 #   - устанавливает необходимые для работы пакеты: jq, sed, grep
 #   - скачивает скрипт t_control.sh и сопутствующие файлы в локальный каталог /opt/apps/t_control
-#   - создает ссылку в каталое /opt/etc/inti.d для автозапуска скритпа t_control.sh
+#   - создает скрипт в каталоге /opt/etc/inti.d для автозапуска скритпа t_control.sh
 #   - запускает скрипт t_control.sh
 
 # Как использовать:
 #   - Создать бота Telegram, получить bot token и chat ID - https://sitogon.ru/blog/252-kak-sozdat-telegram-bot-poluchit-ego-token-i-chat-id
 #   - Подключитсья по ssh к своему роутеру или серверу Linux
 #   - Установить пакет curl командой "opkg install curl" (роутер) или "apt install curl" (сервер с debian, ubuntu ...)
-#   - Выполните команду "curl -sOfL "https://raw.githubusercontent.com/MrKsey/t_control/main/setup.sh" && sh setup.sh"
+#   - Выполнить команду "curl -sOfL "https://raw.githubusercontent.com/MrKsey/t_control/main/setup.sh" && sh setup.sh"
 
 
 GIT_URL="https://raw.githubusercontent.com/MrKsey/t_control/main"
@@ -33,10 +33,12 @@ echo -n "Введите [1-3]: "
 read choice
 
 if [ "$choice" = "3" ]; then
+    # Выход ...
     exit 3
 fi
 
 if [ "$choice" = "2" ]; then
+    # Удаление ...
     echo
     echo "Удаляем $STARTUP/S97t_control ..."
     $STARTUP/S97t_control stop
@@ -48,6 +50,7 @@ if [ "$choice" = "2" ]; then
     exit 2
 fi
 
+# Установка ...
 echo
 echo "Перед продолжением необходмио создать бота Telegram, получить bot token и chat ID."
 echo "Как это сделать см. пример:"

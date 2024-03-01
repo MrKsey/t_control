@@ -11,9 +11,12 @@
 #   - Создать бота Telegram, получить bot token и chat ID - https://sitogon.ru/blog/252-kak-sozdat-telegram-bot-poluchit-ego-token-i-chat-id
 #   - Подключитсья по ssh к своему роутеру или серверу Linux
 #   - Установить пакет curl командой "opkg install curl" (роутер) или "apt install curl" (сервер с debian, ubuntu ...)
-#   - Выполните команду "curl -sOfL https://raw.githubusercontent.com/MrKsey/t_control/main/setup.sh?$(date +%s) && sh setup.sh"
+#   - Выполните команду "curl -sOfL "$GIT_URL/setup.sh?$(date +%s)" && sh setup.sh"
 
 
+GIT_URL="https://raw.githubusercontent.com/MrKsey/t_control/main"
+
+# Определяем каталог для автозапуска скрипта
 STARTUP="/etc/init.d"
 [ ! -z "$(ls /opt/etc/init.d | grep "^S")" ] && export STARTUP="/opt/etc/init.d"
 
@@ -22,26 +25,27 @@ STARTUP="/etc/init.d"
 
 echo
 echo "Установить или удалить скрипт?: "
-echo "1. Установить"
+echo "1. Установить / Изменить <-"
 echo "2. Удалить"
-echo "3. Выход "
+echo "3. Выход"
 echo -n "Введите [1-3]: "
 
 read choice
 
 if [ "$choice" = "3" ]; then
-    exit 0
+    exit 3
 fi
 
 if [ "$choice" = "2" ]; then
     echo
     echo "Удаляем $STARTUP/S97t_control ..."
-    rm $STARTUP/S97t_control_2
+    $STARTUP/S97t_control stop
+    rm $STARTUP/S97t_control
     echo "Удаляем /opt/apps/t_control ..."
-    rm -rf /opt/apps/test
+    rm -rf /opt/apps/t_control
     echo "Удаление завершено."
     echo
-    exit 0
+    exit 2
 fi
 
 echo
@@ -51,21 +55,20 @@ echo "https://sitogon.ru/blog/252-kak-sozdat-telegram-bot-poluchit-ego-token-i-c
 echo
 read -p  "Для продолжения нажмите Enter ..." ANS
 echo
-read -p  "Введите Bot Token и нажмите Enter: " BOT_TOKEN
-read -p  "Введите Chat ID и нажмите Enter: " BOT_CHAT_ID
+read -p  "Введите Bot Token и нажмите Enter: " TOKEN
+read -p  "Введите Chat ID и нажмите Enter: " CHAT_ID
 echo
-
-# Проверка наличия BOT_TOKEN и BOT_CHAT_ID
-if [ -z "$BOT_TOKEN" ] || [ -z "$BOT_CHAT_ID" ]; then
-    echo
-    echo "Отсутсвует BOT_TOKEN или BOT_CHAT_ID. Установка не выполнена."
-    echo "Завршение работы скрипта."
-    echo
-    exit 1
-fi
 
 # ---------------------------------------------------------------------------------------------------------
 
+# Проверка наличия BOT_TOKEN и BOT_CHAT_ID
+if [ -z "$TOKEN" ] || [ -z "$CHAT_ID" ]; then
+    echo
+    echo "Отсутсвует TOKEN или CHAT ID !"
+    echo "Установка не выполнена. Завершение работы скрипта."
+    echo
+    exit 1
+fi
 
 # Отключаем лишнее взаимодейстивие
 export DEBIAN_FRONTEND=noninteractive
@@ -85,3 +88,27 @@ else
     # Автоматическая установка необходимых пакетов
     $PKG install jq sed grep
 fi
+
+# Загрузка файлов
+cd $STARTUP
+curl -sO "$GIT_URL/S97t_control" && chmod a+x ./S97t_control
+
+mkdir -p /opt/apps/t_control && cd /opt/apps/t_control
+curl -sO "$GIT_URL/t_control.sh" && chmod a+x ./t_control.sh
+[ ! -f ./cmd_alias.lib ] && curl -sO "$GIT_URL/cmd_alias.lib"
+[ ! -f ./cmd_macro.lib ] && curl -sO "$GIT_URL/cmd_macro.lib"
+[ ! -f ./cmd_list.txt ] && curl -sO "$GIT_URL/cmd_list.txt"
+
+# Прописать в файле t_control.sh переменные BOT_TOKEN и BOT_CHAT_ID
+sed -i "/^BOT_TOKEN=/{h;s/=.*/=${TOKEN}/};\${x;/^$/{s//BOT_TOKEN=${TOKEN}/;H};x}" ./t_control.sh
+sed -i "/^BOT_CHAT_ID=/{h;s/=.*/=${CHAT_ID}/};\${x;/^$/{s//BOT_CHAT_ID=${CHAT_ID}/;H};x}" ./t_control.sh
+
+# Запуск ...
+$STARTUP/S97t_control restart &
+
+echo
+echo "Установка успешно завершена!"
+echo "Для справки введите /help в вашем Telegram-боте"
+echo
+
+exit 0

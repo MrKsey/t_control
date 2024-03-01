@@ -24,7 +24,7 @@ echo -n "Введите [1-3]: "
 
 read choice
 
-fi [ choice -eq 3]; then
+if [ choice -eq 3]; then
     exit 0
 fi
 

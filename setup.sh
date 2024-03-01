@@ -33,5 +33,5 @@ if [ -z "$(echo $PKG)" ]; then
 fi
 
 # Установка необходимых пакетов
-$PKG install curl jq
+$PKG install jq
 

@@ -1,0 +1,8 @@
+kvas
+uname
+ping
+hostname
+dig
+nslookup
+top
+

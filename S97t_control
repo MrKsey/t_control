@@ -1,0 +1,44 @@
+#!/bin/sh
+# Управление скриптом t_control.sh
+
+start() {
+    if [ $(pgrep -f ./t_control.sh) ]; then
+        echo
+        echo "t_control.sh уже ЗАПУЩЕН"
+        echo
+    else
+        cd /opt/apps/t_control
+        (&>/dev/null ./t_control.sh &)
+        echo
+        [ ! -z "$(pgrep -f ./t_control.sh)" ] && echo "t_control.sh ЗАПУЩЕН" || echo "t_control.sh ОСТАНОВЛЕН"
+        echo
+    fi
+}
+
+stop() {
+    echo
+    [ $(pgrep -f ./t_control.sh) ] && kill -9 $(pgrep -f ./t_control.sh)
+    echo
+    [ ! -z "$(pgrep -f ./t_control.sh)" ] && echo "t_control.sh ЗАПУЩЕН" || echo "t_control.sh ОСТАНОВЛЕН"
+    echo
+}
+
+case "$1" in 
+    start)
+       start
+       ;;
+    stop)
+       stop
+       ;;
+    restart)
+       stop
+       start
+       ;;
+    status)
+       echo; [ ! -z "$(pgrep -f ./t_control.sh)" ] && echo "t_control.sh ЗАПУЩЕН" || echo "t_control.sh ОСТАНОВЛЕН"; echo
+       ;;
+    *)
+       echo;echo "Usage: $0 {start|stop|status|restart}";echo
+esac
+
+exit 0

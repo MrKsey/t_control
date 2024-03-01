@@ -2,22 +2,48 @@
 
 # Установщик скрипта для запуска команд на локальном хосте через бота Telegram
 # Что делает:
-#   - устанволивает необходимые для работы пакеты curl и jq
+#   - устанавливает необходимые для работы пакеты: jq, sed, grep
 #   - скачивает скрипт t_control.sh и сопутствующие файлы в локальный каталог /opt/apps/t_control
 #   - создает ссылку в каталое /opt/etc/inti.d для автозапуска скритпа t_control.sh
 #   - запускает скрипт t_control.sh
 
 # Как использовать:
-#   - Подключитесь по ssh к своему роутеру или серверу Linux.
-#   - Установите пакет curl командой "opkg install curl" (роутер) или "apt install curl" (сервер)
-#   - Выполните команду "curl -sOfL http://kvas.zeleza.ru/upgrade && sh upgrade"
+#   - Создать бота Telegram, получить bot token и chat ID - https://sitogon.ru/blog/252-kak-sozdat-telegram-bot-poluchit-ego-token-i-chat-id
+#   - Подключитсья по ssh к своему роутеру или серверу Linux
+#   - Установить пакет curl командой "opkg install curl" (роутер) или "apt install curl" (сервер с debian, ubuntu ...)
+#   - Выполните команду "curl -sL https://raw.githubusercontent.com/MrKsey/t_control/main/setup.sh | sh"
+
+
+# -------------  Взаимодействие с пользователем -----------------------------------------------------------
+
+echo
+echo "Перед продолжением необходмио создать бота Telegram, получить bot token и chat ID. Как это сделать см. пример:"
+echo "https://sitogon.ru/blog/252-kak-sozdat-telegram-bot-poluchit-ego-token-i-chat-id"
+echo
+read -p  "Для продолжения нажмите Enter ..."
+echo
+read -p  "Введите Bot Token и нажмите Enter: " BOT_TOKEN
+read -p  "Введите Chat ID и нажмите Enter: " BOT_CHAT_ID
+echo
+
+# Проверка наличия BOT_TOKEN и BOT_CHAT_ID
+if [ -z "$BOT_TOKEN" ] || [ -z "$BOT_CHAT_ID" ]; then
+    echo
+    echo "Отсутсвует BOT_TOKEN или BOT_CHAT_ID. Установка не выполнена."
+    echo "Завршение работы скрипта."
+    echo
+    exit 1
+fi
+
+
+# ---------------------------------------------------------------------------------------------------------
+
 
 # Отключаем случайный запуск псевдографических программ (типа, Midnight Commander)
 export TERM=dumb
 
 # Отключаем лишнее взаимодейстивие с пользователем
 export DEBIAN_FRONTEND=noninteractive
-
 
 # Система управления пакетами
 PKG=""
@@ -33,5 +59,4 @@ if [ -z "$(echo $PKG)" ]; then
 fi
 
 # Установка необходимых пакетов
-$PKG install jq
-
+$PKG install jq sed grep

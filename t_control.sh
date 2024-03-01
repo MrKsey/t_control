@@ -1,10 +1,11 @@
 #!/bin/sh
 
-# Скрипт для запуска команд на локальном хосте через бота Telegram
+# Скрипт для запуска команд на удаленном хосте через бота Telegram
 # Для работы требуется:
-#   - создать бота - https://sitogon.ru/blog/252-kak-sozdat-telegram-bot-poluchit-ego-token-i-chat-id
-#   - установить скрипт
-
+#   - Создать бота Telegram, получить bot token и chat ID - https://sitogon.ru/blog/252-kak-sozdat-telegram-bot-poluchit-ego-token-i-chat-id
+#   - Подключитсья по ssh к своему роутеру или серверу Linux
+#   - Установить пакет curl командой "opkg install curl" (роутер) или "apt install curl" (сервер с debian, ubuntu ...)
+#   - Выполнить команду "curl -sOfL "https://raw.githubusercontent.com/MrKsey/t_control/main/setup.sh" && sh setup.sh"
 
 # Telegram bot token and chat ID, как получить - https://sitogon.ru/blog/252-kak-sozdat-telegram-bot-poluchit-ego-token-i-chat-id
 BOT_TOKEN=
@@ -21,8 +22,6 @@ MODE=RESTRICTED
 
 # Частота опроса бота. По-умолчанию - каждые 5 сек.
 READ_FREQ=5
-
-
 
 #------- Не редактировать! ---------------------------------------------------------------------------------------------------
 
@@ -57,7 +56,6 @@ CMD_MACRO=$(grep "^_" ./cmd_macro.lib | grep "()" | tr -d '()')
 
 # Alias
 . ./cmd_alias.lib
-
 
 # Главный цикл скрипта - читаем сообщения от бота каждые <READ_FREQ> секунд.
 while true

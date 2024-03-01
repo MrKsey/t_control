@@ -17,10 +17,11 @@
 # -------------  Взаимодействие с пользователем -----------------------------------------------------------
 
 echo
-echo "Перед продолжением необходмио создать бота Telegram, получить bot token и chat ID. Как это сделать см. пример:"
+echo "Перед продолжением необходмио создать бота Telegram, получить bot token и chat ID."
+echo "Как это сделать см. пример:"
 echo "https://sitogon.ru/blog/252-kak-sozdat-telegram-bot-poluchit-ego-token-i-chat-id"
 echo
-read -p  "Для продолжения нажмите Enter ..."
+read -p  "Для продолжения нажмите Enter ..." ANS
 echo
 read -p  "Введите Bot Token и нажмите Enter: " BOT_TOKEN
 read -p  "Введите Chat ID и нажмите Enter: " BOT_CHAT_ID
@@ -60,3 +61,4 @@ fi
 
 # Установка необходимых пакетов
 $PKG install jq sed grep
+
